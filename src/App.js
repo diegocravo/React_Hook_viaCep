@@ -1,23 +1,31 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
+function App(props) {
+
+  const [cep, setCep] = useState({});
+
+  function handleTextChange(e) {
+    e.preventDefault();
+    fetch(`https://viacep.com.br/ws/${e.target.value}/json/`)
+    .then(res => res.json())
+    .then(res => setCep(res))
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <strong>Olá, {props.name}</strong>
+      <div>
+        digite o CEP: 
+        <input
+          type="text"
+          onChange={handleTextChange}
         >
-          Learn React
-        </a>
-      </header>
+        </input>
+        {Object.entries(cep).map((values, key) => (
+          <h2 key={key}><strong>{values[0]}:</strong> {values[1]}</h2>
+        ))}
+      </div>
     </div>
   );
 }
